@@ -67,7 +67,7 @@ class EditProfileScreen extends StatelessWidget {
                                   radius: 20,
                                   child: IconButton(
                                       onPressed: (){
-                                        HomeCubit.get(context).getCoverImage(ImageSource.camera);
+                                        HomeCubit.get(context).getCoverImage(ImageSource.gallery);
                                       },
                                       icon: const Icon(Icons.camera_alt_outlined)),
                                 )
@@ -142,6 +142,10 @@ class EditProfileScreen extends StatelessWidget {
                           hintText:'Bio',
                         ),
                       ),
+                      SizedBox(height: 20,),
+                      MaterialButton(onPressed: (){
+                        HomeCubit.get(context).updateProfileImage();
+                      },child: Text('Update'),)
                     ])),
                 fallback: (context)=>const Center(child: CircularProgressIndicator()),
               ));

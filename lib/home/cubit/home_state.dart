@@ -28,4 +28,11 @@ class UploadProfileImageSuccessState extends HomeState{}
 
 class UploadProfileImageErrorState extends HomeState{}
 
+class UploadCoverImageSuccessState extends HomeState{}
+
+class UploadCoverImageErrorState extends HomeState{}
+
+class UpdateUserErrorState extends HomeState{}
+
+
 

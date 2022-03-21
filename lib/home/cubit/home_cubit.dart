@@ -58,6 +58,7 @@ class HomeCubit extends Cubit<HomeState> {
     final image = await _imagePicker.pickImage(source: source);
     if (image != null) {
       profileImage = File(image.path);
+      print(profileImage!.path);
       emit(GetProfileImageSuccessState());
     } else {
       emit(GetProfileImageErrorState());
@@ -76,19 +77,73 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  String profileImageUrl = '';
+
   void updateProfileImage() {
     firebase_storage.FirebaseStorage.instance
         .ref()
-        .child('users/${Uri.file(profileImage!.path).pathSegments.last}')
+        .child('user/${Uri.file(profileImage!.path).pathSegments.last}')
         .putFile(profileImage!)
         .then((value) {
       value.ref.getDownloadURL().then((value) {
+        profileImageUrl = value;
+        print(value);
         emit(UploadProfileImageSuccessState());
       }).catchError((error) {
+        print(error.toString());
         emit(UploadProfileImageErrorState());
       });
     }).catchError((error) {
+      print(error.toString());
       emit(UploadProfileImageErrorState());
+    });
+  }
+
+  String coverImageUrl = '';
+
+  void updateCoverImage() {
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('user/${Uri.file(coverImage!.path).pathSegments.last}')
+        .putFile(coverImage!)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        print(value);
+        coverImageUrl = value;
+        emit(UploadProfileImageSuccessState());
+      }).catchError((error) {
+        print(error.toString());
+        emit(UploadCoverImageErrorState());
+      });
+    }).catchError((error) {
+      print(error.toString());
+      emit(UploadCoverImageErrorState());
+    });
+  }
+
+  void userUpdate(
+      {required String email,
+      required String name,
+      required String phone,
+      required String bio}) {
+    UserCreate users = UserCreate(
+        email: email,
+        name: name,
+        phone: phone,
+        uId: uId,
+        isEmailVerified: false,
+        bio: bio,
+        cover: coverImage == null ? model!.cover : coverImageUrl,
+        image: profileImage == null ? model!.image : profileImageUrl);
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(model!.uId)
+        .update(users.toMap())
+        .then((value) {
+          getUserData();
+    })
+        .catchError((error) {
+          emit(UpdateUserErrorState());
     });
   }
 }

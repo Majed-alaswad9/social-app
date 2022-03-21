@@ -46,6 +46,7 @@ class LoginSignUpCubit extends Cubit<LogInSIgnUpState> {
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
+          print(value.user!.uid);
       userCreate(email: email, name: name, phone: phone, uId: value.user!.uid);
     }).catchError((error) {
       print(error.toString());
