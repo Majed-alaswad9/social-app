@@ -40,13 +40,12 @@ class LoginSignUpCubit extends Cubit<LogInSIgnUpState> {
       {required String email,
       required String password,
       required String name,
-      required String phone,
-      BuildContext? context}) {
+      required String phone}) {
     emit(SignUpLoadState());
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
-          print(value.user!.uid);
+      print(value.user!.uid);
       userCreate(email: email, name: name, phone: phone, uId: value.user!.uid);
     }).catchError((error) {
       print(error.toString());
@@ -60,7 +59,7 @@ class LoginSignUpCubit extends Cubit<LogInSIgnUpState> {
       required String phone,
       required String uId}) {
     emit(CreateLoadState());
-    UserCreate users = UserCreate(
+    UserCreate model = UserCreate(
         email: email,
         name: name,
         phone: phone,
@@ -68,14 +67,14 @@ class LoginSignUpCubit extends Cubit<LogInSIgnUpState> {
         isEmailVerified: false,
         bio: 'write you bio...',
         cover: 'https://student.valuxapps.com/storage/assets/defaults/user.jpg',
-        image:
+        profileImage:
             'https://student.valuxapps.com/storage/assets/defaults/user.jpg');
     FirebaseFirestore.instance
-        .collection('user')
+        .collection('users')
         .doc(uId)
-        .set(users.toMap())
+        .set(model.toMap())
         .then((value) {
-      emit(CreateSuccessState(users));
+      emit(CreateSuccessState(model));
     }).catchError((error) {
       emit(CreateErrorState(error.toString()));
     });

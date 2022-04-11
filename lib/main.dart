@@ -15,15 +15,15 @@ void main() async {
   await Firebase.initializeApp();
   Bloc.observer = MyBlocObserver();
   await CachHelper.init();
-  Widget statetWidget;
+  Widget stateWidget;
   uId = CachHelper.getData(key: 'uId');
   bool? isDark = CachHelper.getData(key: 'isDark') ?? true;
   if (uId != null) {
-    statetWidget = HomeLayout();
+    stateWidget = const HomeLayout();
   } else {
-    statetWidget = LoginApp();
+    stateWidget = LoginApp();
   }
-  runApp(MyApp(statetWidget, isDark!));
+  runApp(MyApp(stateWidget, isDark!));
 }
 
 class MyApp extends StatelessWidget {

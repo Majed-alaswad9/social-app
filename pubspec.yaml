@@ -41,6 +41,7 @@ dependencies:
   image_picker: ^0.8.4+11
   shared_preferences:
   curved_navigation_bar: ^1.0.3
+  path:
   firebase_core: null
   firebase_auth: null
   cloud_firestore: null

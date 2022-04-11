@@ -35,7 +35,6 @@ class RegisterScreen extends StatelessWidget {
         },
         builder: (context, state) {
           var cubit = LoginSignUpCubit.get(context);
-
           return Scaffold(
             appBar: AppBar(),
             body: Center(

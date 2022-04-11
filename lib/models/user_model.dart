@@ -3,7 +3,7 @@ class UserCreate {
   String? phone;
   String? name;
   String? uId;
-  String? image;
+  String? profileImage;
   String? cover;
   String? bio;
   bool? isEmailVerified;
@@ -16,7 +16,7 @@ class UserCreate {
       this.bio,
       this.cover,
       this.isEmailVerified,
-      this.image});
+      this.profileImage});
 
   UserCreate.fromJson(Map<String, dynamic> json) {
     email = json['email'];
@@ -25,7 +25,7 @@ class UserCreate {
     uId = json['uId'];
     cover = json['cover'];
     bio = json['bio'];
-    image = json['image'];
+    profileImage = json['profileImage'];
     isEmailVerified = json['isEmailVerified'];
   }
 
@@ -38,7 +38,7 @@ class UserCreate {
       'cover': cover,
       'bio': bio,
       'isEmailVerified': isEmailVerified,
-      'image': image
+      'profileImage': profileImage
     };
   }
 }
