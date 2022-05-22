@@ -24,48 +24,48 @@ class SettingScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 260,
-                      child: Stack(
-                        alignment: AlignmentDirectional.bottomCenter,
-                        children: [
-                          Align(
-                            child: Container(
-                              width: double.infinity,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  image:  DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                        'https://img.freepik.com/free-photo/waist-up-portrait-handsome-serious-unshaven-male-keeps-hands-together-dressed-dark-blue-shirt-has-talk-with-interlocutor-stands-against-white-wall-self-confident-man-freelancer_273609-16320.jpg?t=st=1647433213~exp=1647433813~hmac=334747c3be9988fa4d9ac995fd5d04d36cebd1c4a9d458aeb96781c3c2320987&w=826'),
-                                  )),
-                            ),
-                            alignment: AlignmentDirectional.topCenter,
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                            radius: 65,
-                            child: CircleAvatar(
-                              radius: 60,
-                              backgroundImage: NetworkImage(
-                                  'https://img.freepik.com/free-photo/waist-up-portrait-handsome-serious-unshaven-male-keeps-hands-together-dressed-dark-blue-shirt-has-talk-with-interlocutor-stands-against-white-wall-self-confident-man-freelancer_273609-16320.jpg?t=st=1647433213~exp=1647433813~hmac=334747c3be9988fa4d9ac995fd5d04d36cebd1c4a9d458aeb96781c3c2320987&w=826'),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: 260,
+                    //   child: Stack(
+                    //     alignment: AlignmentDirectional.bottomCenter,
+                    //     children: [
+                    //       Align(
+                    //         child: Container(
+                    //           width: double.infinity,
+                    //           height: 200,
+                    //           decoration: BoxDecoration(
+                    //               borderRadius: BorderRadius.circular(5),
+                    //               image:  DecorationImage(
+                    //                 fit: BoxFit.cover,
+                    //                 image: NetworkImage(
+                    //                     'https://img.freepik.com/free-photo/waist-up-portrait-handsome-serious-unshaven-male-keeps-hands-together-dressed-dark-blue-shirt-has-talk-with-interlocutor-stands-against-white-wall-self-confident-man-freelancer_273609-16320.jpg?t=st=1647433213~exp=1647433813~hmac=334747c3be9988fa4d9ac995fd5d04d36cebd1c4a9d458aeb96781c3c2320987&w=826'),
+                    //               )),
+                    //         ),
+                    //         alignment: AlignmentDirectional.topCenter,
+                    //       ),
+                    //       CircleAvatar(
+                    //         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    //         radius: 65,
+                    //         child: CircleAvatar(
+                    //           radius: 60,
+                    //           backgroundImage: NetworkImage(
+                    //               'https://img.freepik.com/free-photo/waist-up-portrait-handsome-serious-unshaven-male-keeps-hands-together-dressed-dark-blue-shirt-has-talk-with-interlocutor-stands-against-white-wall-self-confident-man-freelancer_273609-16320.jpg?t=st=1647433213~exp=1647433813~hmac=334747c3be9988fa4d9ac995fd5d04d36cebd1c4a9d458aeb96781c3c2320987&w=826'),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     Text(
                       '${model!.name}',
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    const SizedBox(height: 20,),
                     Text(
                       '${model.bio}',
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 15,
                           color: Colors.grey
                       ),
@@ -178,7 +178,7 @@ class SettingScreen extends StatelessWidget {
                         ),
                         const SizedBox(width: 10,),
                         OutlinedButton(onPressed: (){
-                          navigatorTo(context: context, widget: EditProfileScreen());
+                          navigatorTo(context: context, widget: EditProfileScreen(model));
                         },
                             child: const Icon(Icons.edit))
 

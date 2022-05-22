@@ -13,7 +13,7 @@ class HomeLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context)=>HomeCubit()..getUserData(),
+    return BlocProvider(create: (context)=>HomeCubit()..getUserData()..getPosts(),
     child: BlocConsumer<HomeCubit,HomeState>(
       listener: (context,state){
         if(state is NewPostState){

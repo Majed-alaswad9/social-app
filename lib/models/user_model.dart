@@ -1,4 +1,4 @@
-class UserCreate {
+class UserModel {
   String? email;
   String? phone;
   String? name;
@@ -8,7 +8,7 @@ class UserCreate {
   String? bio;
   bool? isEmailVerified;
 
-  UserCreate(
+  UserModel(
       {this.email,
       this.phone,
       this.name,
@@ -18,7 +18,7 @@ class UserCreate {
       this.isEmailVerified,
       this.profileImage});
 
-  UserCreate.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     name = json['name'];
     phone = json['phone'];

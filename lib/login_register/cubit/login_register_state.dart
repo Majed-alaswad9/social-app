@@ -34,7 +34,7 @@ class SignUpErrorState extends LogInSIgnUpState{
 }
 
 class CreateSuccessState extends LogInSIgnUpState{
-  final UserCreate? user;
+  final UserModel? user;
 
   CreateSuccessState(this.user);
 }

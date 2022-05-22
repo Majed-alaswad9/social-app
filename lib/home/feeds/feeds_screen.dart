@@ -2,60 +2,75 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social_app/home/comments/comments_screen.dart';
 import 'package:social_app/home/cubit/home_cubit.dart';
 import 'package:social_app/home/cubit/home_state.dart';
+import 'package:social_app/models/post_model.dart';
+import 'package:social_app/shared/components.dart';
 
 class FeedsScreen extends StatelessWidget {
   const FeedsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeCubit,HomeState>(
-      listener: (context,state){},
-      builder: (context,state){
-        return SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            children: [
-              const Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                elevation: 10,
-                margin: EdgeInsetsDirectional.all(10),
-                child: Image(
-                  image: NetworkImage('https://img.freepik.com/free-photo/woman-using-smartphone-social-media-conecpt_53876-40967.jpg?t=st=1647704509~exp=1647705109~hmac=f1ae56f2218ca7938f19ae0fbd675b8c6b2e21d3d25548429a500e43f89ce211&w=740'),
-                  fit: BoxFit.cover,
-                  height: 250,
-                  width: double.infinity,
+    return BlocProvider(
+      create: (context)=>HomeCubit()..getPosts(),
+      child: BlocConsumer<HomeCubit,HomeState>(
+        listener: (context,state){},
+        builder: (context,state){
+          return SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                const Card(
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  elevation: 10,
+                  margin: EdgeInsetsDirectional.all(10),
+                  child: Image(
+                    image: NetworkImage('https://img.freepik.com/free-photo/woman-using-smartphone-social-media-conecpt_53876-40967.jpg?t=st=1647704509~exp=1647705109~hmac=f1ae56f2218ca7938f19ae0fbd675b8c6b2e21d3d25548429a500e43f89ce211&w=740'),
+                    fit: BoxFit.cover,
+                    height: 250,
+                    width: double.infinity,
+                  ),
                 ),
-              ),
-              ListView.separated(
-                shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context,index)=>buildPost(context),
-                  separatorBuilder:(context,index)=> const SizedBox(height: 10,),
-                  itemCount: 10)
+                ConditionalBuilder(condition:  HomeCubit.get(context).posts.isNotEmpty,
+                    builder: (context)=> ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context,index)=>buildPost(context,HomeCubit.get(context).posts[index],index),
+                        separatorBuilder:(context,index)=> const SizedBox(height: 10,),
+                        itemCount: HomeCubit.get(context).posts.length),
+                    fallback:(context)=> Center(child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.menu,size: 50,),
+                        Text('No Posts Yet',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                      ],
+                    ),))
 
-            ],
-          ),
-        );
-      },
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
-  Widget buildPost(context)=>Card(
+  Widget buildPost(context,PostModel post,index)=>Card(
       elevation: 10,
       clipBehavior: Clip.antiAliasWithSaveLayer,
       margin: const EdgeInsets.symmetric(horizontal: 10),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                const CircleAvatar(
+                 CircleAvatar(
                   radius: 25,
                   backgroundImage: NetworkImage(
-                      'https://student.valuxapps.com/storage/assets/defaults/user.jpg'),
+                      '${post.image}'),
                 ),
                 const SizedBox(
                   width: 10,
@@ -63,16 +78,16 @@ class FeedsScreen extends StatelessWidget {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children:  [
                       Text(
-                        'Majed Alaswad',
-                        style: TextStyle(
+                        '${post.name}',
+                        style: const TextStyle(
                             height: 1.3,
                             fontWeight: FontWeight.bold,
                             fontSize: 17),
                       ),
-                      Text('2022/03/16 at 1"00 PM',
-                          style: TextStyle(
+                      Text('${post.dateTime}',
+                          style: const TextStyle(
                               height: 1.3, color: Colors.grey))
                     ],
                   ),
@@ -91,48 +106,71 @@ class FeedsScreen extends StatelessWidget {
               ),
             ),
             Text(
-              'To stay on top of the tech industry, I have to read A LOT of industry articles every day. At the end of the year, I like to reflect on what I read and see what has made the biggest impression. Here are the top 10 articles that I believe every programmer should read from this year. Reading these articles has made me a better programmer/engineer/developer/human and I hope it will do the same for you. Let me know if I missed any by sending me a tweet',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: Wrap(
-                  children: [
-                    Container(
-                      padding: const EdgeInsetsDirectional.only(end: 10),
-                      height: 25,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        padding: EdgeInsets.zero,
-                        minWidth: 1,
-                        height: 25,
-                        child: Text(
-                          '#flutter',
-                          style: Theme.of(context)
-                              .textTheme
-                              .caption!
-                              .copyWith(
-                              color: Colors.blue, fontSize: 15),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              '${post.text}',
+              style: const TextStyle(
+                fontSize: 20,
               ),
             ),
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  image: const DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(
-                        'https://student.valuxapps.com/storage/assets/defaults/user.jpg'),
-                  )),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+            //   child: SizedBox(
+            //     width: double.infinity,
+            //     child: Wrap(
+            //       children: [
+            //         Container(
+            //
+            //           padding: const EdgeInsetsDirectional.only(end: 10),
+            //           height: 25,
+            //           child: MaterialButton(
+            //             onPressed: () {},
+            //             padding: EdgeInsets.zero,
+            //             minWidth: 1,
+            //             height: 25,
+            //             child: Text(
+            //               '#flutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutterflutter',
+            //               style: Theme.of(context)
+            //                   .textTheme
+            //                   .caption!
+            //                   .copyWith(
+            //                   color: Colors.blue, fontSize: 18),
+            //             ),
+            //           ),
+            //         ),
+            //         Container(
+            //           padding: const EdgeInsetsDirectional.only(end: 10),
+            //           height: 25,
+            //           child: MaterialButton(
+            //             onPressed: () {},
+            //             padding: EdgeInsets.zero,
+            //             minWidth: 1,
+            //             height: 25,
+            //             child: Text(
+            //               '#flutterflutter',
+            //
+            //               style: Theme.of(context)
+            //                   .textTheme
+            //                   .caption!
+            //                   .copyWith(
+            //                   color: Colors.blue, fontSize: 18),
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
+            // Container(
+            //   width: double.infinity,
+            //   height: 200,
+            //   decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(5),
+            //       image: const DecorationImage(
+            //         fit: BoxFit.cover,
+            //         image: NetworkImage(
+            //             'https://student.valuxapps.com/storage/assets/defaults/user.jpg'),
+            //       )),
+            // ),
+
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 5.0),
               child: Row(
@@ -145,7 +183,7 @@ class FeedsScreen extends StatelessWidget {
                         child: Row(
                           children: [
                             const Icon(
-                              Icons.add_reaction,
+                              Icons.thumb_up,
                               size: 20,
                               color: Colors.grey,
                             ),
@@ -153,7 +191,7 @@ class FeedsScreen extends StatelessWidget {
                               width: 5,
                             ),
                             Text(
-                              '120',
+                              '${HomeCubit.get(context).likes[index]}',
                               style: Theme.of(context)
                                   .textTheme
                                   .caption!
@@ -195,11 +233,12 @@ class FeedsScreen extends StatelessWidget {
                 ],
               ),
             ),
+
             Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Container(
                 width: double.infinity,
-                height: 1,
+                height: 2,
                 color: Colors.grey,
               ),
             ),
@@ -218,19 +257,23 @@ class FeedsScreen extends StatelessWidget {
                         Text('Write Comment...',style: TextStyle(fontSize: 15,color: Colors.grey),),
                       ],
                     ),
-                    onTap: (){},
+                    onTap: (){
+                      navigatorTo(context: context, widget: CommentsScreen(post));
+                    },
                   ),
                 ),
                 InkWell(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: const [
-                      Icon(Icons.add_reaction,size: 20,color: Colors.grey,),
+                      Icon(Icons.thumb_up,size: 20,color: Colors.grey,),
                       SizedBox(width: 5,),
                       Text('like',style: TextStyle(fontSize: 15,color: Colors.grey))
                     ],
                   ),
-                  onTap: (){},
+                  onTap: (){
+                    HomeCubit.get(context).likePosts(HomeCubit.get(context).postId[index]);
+                  },
                 )
               ],
             )

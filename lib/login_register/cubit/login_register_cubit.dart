@@ -29,6 +29,12 @@ class LoginSignUpCubit extends Cubit<LogInSIgnUpState> {
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
+          if(value.user!=null){
+            AuthCredential credential =
+            EmailAuthProvider.credential(email: email, password: password);
+            FirebaseAuth.instance.currentUser!
+                .reauthenticateWithCredential(credential);
+          }
       emit(LogInSuccessState(value.user!.uid));
     }).catchError((error) {
       print(error.toString());
@@ -41,16 +47,24 @@ class LoginSignUpCubit extends Cubit<LogInSIgnUpState> {
       required String password,
       required String name,
       required String phone}) {
-    emit(SignUpLoadState());
-    FirebaseAuth.instance
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .then((value) {
-      print(value.user!.uid);
-      userCreate(email: email, name: name, phone: phone, uId: value.user!.uid);
-    }).catchError((error) {
-      print(error.toString());
-      emit(SignUpErrorState(error.toString()));
-    });
+    try {
+      emit(SignUpLoadState());
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password)
+          .then((value) {
+            if(value.user!=null){
+              userCreate(
+                  email: email, name: name, phone: phone, uId: value.user!.uid);
+              AuthCredential credential =
+              EmailAuthProvider.credential(email: email, password: password);
+              FirebaseAuth.instance.currentUser!
+                  .reauthenticateWithCredential(credential);
+            }
+      }).catchError((error) {
+        print(error.toString());
+        emit(SignUpErrorState(error.toString()));
+      });
+    } catch (e) {}
   }
 
   void userCreate(
@@ -58,25 +72,28 @@ class LoginSignUpCubit extends Cubit<LogInSIgnUpState> {
       required String name,
       required String phone,
       required String uId}) {
-    emit(CreateLoadState());
-    UserCreate model = UserCreate(
-        email: email,
-        name: name,
-        phone: phone,
-        uId: uId,
-        isEmailVerified: false,
-        bio: 'write you bio...',
-        cover: 'https://student.valuxapps.com/storage/assets/defaults/user.jpg',
-        profileImage:
-            'https://student.valuxapps.com/storage/assets/defaults/user.jpg');
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(uId)
-        .set(model.toMap())
-        .then((value) {
-      emit(CreateSuccessState(model));
-    }).catchError((error) {
-      emit(CreateErrorState(error.toString()));
-    });
+    try {
+      emit(CreateLoadState());
+      UserModel model = UserModel(
+          email: email,
+          name: name,
+          phone: phone,
+          uId: uId,
+          isEmailVerified: false,
+          bio: 'write you bio...',
+          cover:
+              'https://student.valuxapps.com/storage/assets/defaults/user.jpg',
+          profileImage:
+              'https://student.valuxapps.com/storage/assets/defaults/user.jpg');
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(uId)
+          .set(model.toMap())
+          .then((value) {
+        emit(CreateSuccessState(model));
+      }).catchError((error) {
+        emit(CreateErrorState(error.toString()));
+      });
+    } catch (e) {}
   }
 }
