@@ -19,6 +19,7 @@ class CommentsScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(),
+
             body: Column(
               children: [
                 Card(
@@ -34,14 +35,16 @@ class CommentsScreen extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   radius: 25,
-                                  backgroundImage: NetworkImage('${post!.image}'),
+                                  backgroundImage:
+                                      NetworkImage('${post!.image}'),
                                 ),
                                 const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         '${post!.name}',
@@ -59,7 +62,6 @@ class CommentsScreen extends StatelessWidget {
                                 IconButton(
                                     onPressed: () {},
                                     icon: const Icon(Icons.more_horiz)),
-
                               ],
                             ),
                             Padding(
@@ -76,12 +78,18 @@ class CommentsScreen extends StatelessWidget {
                                 fontSize: 20,
                               ),
                             ),
-
                           ])),
                 ),
-                SizedBox(height: 20,),
-                Center(child: Text('comments...',style:TextStyle(fontSize: 20),)),
-                SizedBox(height: 20,),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'comments...',
+                  style: TextStyle(fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Expanded(
                   child: Card(
                     elevation: 10,
@@ -98,11 +106,12 @@ class CommentsScreen extends StatelessWidget {
                                   bottomEnd: Radius.circular(10),
                                   bottomStart: Radius.circular(10),
                                   topStart: Radius.circular(10))),
-                          child: Padding(
+                          child:  Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: Text(
-                              '{msg.text}',
-                              style: const TextStyle(color: Colors.black, fontSize: 16),
+                              '${post!.text}',
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 16),
                             ),
                           ),
                         ),
